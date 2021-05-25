@@ -308,7 +308,12 @@ Vertex* deQueue()
 
 void enQueue(Vertex* v)
 {
-	
+   if (((rear+1)%MAX_QUEUE_SIZE) == front) { // rear의 다음 값이 front일 경우 즉, 큐가 포화상태일 경우
+		printf(" There is an error!! (queue is full)"); // 오류 문자열 출력
+		return;
+	}
+	rear = (rear + 1) % MAX_QUEUE_SIZE; // rear의 값을 한 칸 증가시킴
+	queue[rear] = v; // 증가시킨 rear에 해당하는 큐에 저장	
 }
 
 
