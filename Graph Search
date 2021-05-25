@@ -298,7 +298,11 @@ void initVist()
 
 Vertex* deQueue()
 {
-	
+	if (front == rear){
+		return NULL; // 큐가 비어있으면 바로 종료
+	}
+	front = (front + 1) % MAX_QUEUE_SIZE; // front의 다음 인덱스 값을 저장
+	return queue[front]; // 해당 인덱스의 큐 값 반환
 }
 
 
