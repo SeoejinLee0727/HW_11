@@ -155,7 +155,24 @@ int freeGraph(Graph *G)
 
 int insertVertex(Graph *G, int v)
 {
+   Vertex *new = (Vertex*)malloc(sizeof(Vertex)); // 입력된 정점을 삽입하기 위한 노드 생성
+	new->data = v;
+	new->link = NULL;
 
+	if (v > MAX_VERTEX){
+		printf("[%d] is out of range!!\n"); // 입력된 정점이 범위보다 클 경우 오류 문자열 출력
+		return 0;
+	}
+
+	else if(G[v].Head != NULL){
+		printf("The Vertex of [%d] already exists!!\n", v); // 해당 정점이 삽입 될 배열의 위치가 NULL이 아닐 경우 오류 문자열 출력
+		return 0;
+	}
+
+	else{
+		G[v].Head = new; // 이 외의 경우에는 해당 인덱스의 배열의 head에 해당 번호 노드 추가
+		return 0;
+	}
 }
 
 
