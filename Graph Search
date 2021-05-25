@@ -114,23 +114,18 @@ int main()
 Graph* initialize(Graph *G)
 {
 
-	if (G != NULL) // 그래프가 비어있지 않다면,
-	{
-		freegraph(G->list); // 그래프 전체 초기화
-		printf("To reuse a graph, you must initialize it one more time.");
-		// 그래프를 다시 쓰려면, z를 한번 더 눌러서 공간 마련을 해야함.
-		return NULL;
+	
+	if(G != NULL) freeGraph(G); // 그래프가 비어있지 않다면 해제함
+
+	Graph *temp = (Graph*)malloc(sizeof(Graph)*MAX_VERTEX); // 임시 포인터에 graph 구조체 배열을 할당함
+
+	for(int i = 0; i < MAX_VERTEX; i++){
+		temp[i].Head = NULL; // 각 배열의 head 포인터를 NULL로 초기화
 	}
 
-	else
-	{
-		graph* p = (graph*)malloc(sizeof(graph)); // 그래프 공간 할당
-		for (int i = 0; i < MAX_VERTEX; i++)
-		{
-			p->list[i] = NULL; // 각 노드들을 이어줄 vertex 번호를 인덱스로하는 인접리스트 초기화
-		}
-		return p;
-	}
+	initVist(); // 방문 기록들을 초기화
+
+	return temp; // 할당된 그래프를 반환
 
 }
 
@@ -138,19 +133,20 @@ Graph* initialize(Graph *G)
 
 int freeGraph(Graph *G)
 {
-  listNode* k = NULL;
-	listNode* prev = NULL;
-	for (int i = 0; i < MAX_VERTEX; i++) // prev 포인터를 이용하여 인접리스트를 하나하나 돌면서 메모리 해제
-	{
-		k = G->list[i]; 
-		while (k != NULL)
-		{
-			prev = k;
-			k = k->link;
-			free(prev);
+  Vertex *n, *trail; // 그래프를 해제하기 위한 포인터 선언
+
+	for(int i = 0; i < MAX_VERTEX; i++){
+		n = G[i].Head; // n을 G[i]의 head 포인터로 초기화
+
+		if(n != NULL) { // n이 NULL이 아니라면
+			while(n != NULL){ // n이 NULL이 될 때까지
+				trail = n; // 이전 포인터를 n으로 변경하고
+				n = n->link; // n은 n의 다음 포인터를 가리키도록 함
+				free(trail); // 이전 포인터가 가리키는 노드 해제	
+			}
 		}
 	}
-
+	free(G); // for문 종료 후 그래프 배열 해제
 }
 
 int insertVertex(Graph *G, int v)
